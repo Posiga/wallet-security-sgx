@@ -37,7 +37,7 @@ public class AESCipherTextController {
 
         AttestationReport attestationReport = AttestationReport.fromByteArray(request.getQuote());
 
-        int result = RemoteAttestation.verifyAttestationReport(request.getReport());
+        int result = RemoteAttestation.verifyAttestationReport(attestationReport);
         if (result != 0) {
             return ResponseResult.fail(ErrorCodeEnum.REMOTE_ATTESTATION_VERIFY_FAILED.getMsg(), ErrorCodeEnum.REMOTE_ATTESTATION_VERIFY_FAILED.getCode());
         }
