@@ -14,7 +14,7 @@
     <name>wallet-security-enclave</name>
 
     <properties>
-        <svm.maven.version>0.10.2</svm.maven.version>
+        <svm.maven.version>0.9.13</svm.maven.version>
         <org.apache.teaclave.javasdk.enclave.privatePem.path/>
     </properties>
 
