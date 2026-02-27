@@ -19,8 +19,7 @@ public class EnclaveService {
     private Enclave enclave;
 
     public void create() throws EnclaveCreatingException {
-//        enclave = EnclaveFactory.create(EnclaveType.TEE_SDK);
-        enclave = EnclaveFactory.create(EnclaveType.MOCK_IN_SVM);
+        enclave = EnclaveFactory.create(EnclaveType.TEE_SDK);
     }
 
     public void injectCipher(byte[] cipher) throws ServicesLoadingException {
