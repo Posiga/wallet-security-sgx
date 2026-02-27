@@ -27,9 +27,9 @@
         <graal.version>22.2.0</graal.version>
         <surefire.version>3.0.0-M5</surefire.version>
         <!--生产用-->
-<!--        <org.apache.teaclave.javasdk.platform>TEE_SDK</org.apache.teaclave.javasdk.platform>-->
+        <org.apache.teaclave.javasdk.platform>TEE_SDK</org.apache.teaclave.javasdk.platform>
         <!--本地测试用-->
-    <org.apache.teaclave.javasdk.platform>MOCK_IN_SVM</org.apache.teaclave.javasdk.platform>
+<!--    <org.apache.teaclave.javasdk.platform>MOCK_IN_SVM</org.apache.teaclave.javasdk.platform>-->
     </properties>
 
     <dependencyManagement>
