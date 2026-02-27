@@ -1,6 +1,6 @@
 package com.ida.wallet.security.host.controller;
 
-import com.ida.wallet.security.host.enums.ErrorCodeEnum;
+import com.ida.wallet.security.host.enums.ResponseCodeEnum;
 import com.ida.wallet.security.host.request.CiphertextRequest;
 import com.ida.wallet.security.host.response.CiphertextResponse;
 import com.ida.wallet.security.host.response.ResponseResult;
@@ -39,7 +39,7 @@ public class AESCipherTextController {
 
         int result = RemoteAttestation.verifyAttestationReport(attestationReport);
         if (result != 0) {
-            return ResponseResult.fail(ErrorCodeEnum.REMOTE_ATTESTATION_VERIFY_FAILED.getMsg(), ErrorCodeEnum.REMOTE_ATTESTATION_VERIFY_FAILED.getCode());
+            return ResponseResult.fail(ResponseCodeEnum.REMOTE_ATTESTATION_VERIFY_FAILED.getMsg(), ResponseCodeEnum.REMOTE_ATTESTATION_VERIFY_FAILED.getCode());
         }
 
         byte[] cipher = aesService.getAesCipherText();
