@@ -1,4 +1,4 @@
-package com.ida.wallet.security.enclave;
+package com.ida.wallet.security.enclave.impl;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;

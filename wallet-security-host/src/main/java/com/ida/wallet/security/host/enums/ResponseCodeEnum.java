@@ -5,6 +5,7 @@ import lombok.Getter;
 @Getter
 public enum ResponseCodeEnum {
     REMOTE_ATTESTATION_VERIFY_FAILED(10001, "远程证明验证失败"),
+    SIGNATURE_VERIFY_FAIL(10002, "authentication failure"),
     SUCCESS(99999, "成功");
 
     private final int code;

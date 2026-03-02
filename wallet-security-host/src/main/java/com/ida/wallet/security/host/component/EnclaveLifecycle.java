@@ -1,6 +1,6 @@
-package com.ida.wallet.security.host.enclave;
+package com.ida.wallet.security.host.component;
 
-import com.ida.wallet.security.host.console.ConsoleSecretReader;
+import com.ida.wallet.security.host.service.impl.EnclaveServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.teaclave.javasdk.host.exception.EnclaveCreatingException;
 import org.apache.teaclave.javasdk.host.exception.EnclaveDestroyingException;
@@ -15,13 +15,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @Component
 public class EnclaveLifecycle implements SmartLifecycle {
 
-    private final ConsoleSecretReader reader;
-    private final EnclaveService enclaveService;
+    private final ConsoleInputReader reader;
+    private final EnclaveServiceImpl enclaveService;
 
     private volatile boolean running = false;
     private final AtomicBoolean started = new AtomicBoolean(false);
 
-    public EnclaveLifecycle(ConsoleSecretReader reader, EnclaveService enclaveService) {
+    public EnclaveLifecycle(ConsoleInputReader reader, EnclaveServiceImpl enclaveService) {
         this.reader = reader;
         this.enclaveService = enclaveService;
     }
@@ -34,42 +34,33 @@ public class EnclaveLifecycle implements SmartLifecycle {
             return;
         }
 
-        log.info("Creating enclave...");
-
+        //创建Enclave
         try {
+            log.info("Creating enclave...");
             enclaveService.create();
+            log.info("Created enclave successfully...");
         } catch (EnclaveCreatingException e) {
             throw new IllegalStateException("Failed to create enclave", e);
         }
 
+        //等待用户从控制台输入AES密文并注入Enclave
         log.info("Waiting AES ciphertext input...");
-
         char[] input = null;
         byte[] cipher = null;
-
         try {
-            input = reader.readSecret("AES ciphertext(Base64): ");
-
+            input = reader.readInput("AES ciphertext(Base64): ");
             cipher = decodeBase64(input);
 
-            // Host 只负责传递
-            enclaveService.injectCipher(cipher);
-
+            enclaveService.injectAESCipherText(cipher);
             running = true;
-
             log.info("AES Ciphertext injected into enclave successfully, enclave is running now.");
-
         } catch (Exception e) {
-
             log.error("AES Ciphertext injected into enclave failed", e);
             throw new IllegalStateException("AES Ciphertext injected into enclave failed", e);
-
         } finally {
-
             if (cipher != null) {
                 Arrays.fill(cipher, (byte) 0);
             }
-
             if (input != null) {
                 reader.wipe(input);
             }

@@ -1,6 +1,7 @@
-package com.ida.wallet.security.host.enclave;
+package com.ida.wallet.security.host.service.impl;
 
-import com.ida.wallet.security.common.AESCipherTextManagerService;
+import com.ida.wallet.security.common.service.IAESCipherTextManagerService;
+import com.ida.wallet.security.host.service.IEnclaveService;
 import lombok.Getter;
 import org.apache.teaclave.javasdk.host.Enclave;
 import org.apache.teaclave.javasdk.host.EnclaveFactory;
@@ -10,27 +11,27 @@ import org.apache.teaclave.javasdk.host.exception.EnclaveDestroyingException;
 import org.apache.teaclave.javasdk.host.exception.ServicesLoadingException;
 import org.springframework.stereotype.Service;
 
-import java.util.Iterator;
-
 @Getter
 @Service
-public class EnclaveService {
+public class EnclaveServiceImpl implements IEnclaveService {
 
     private Enclave enclave;
 
+    @Override
     public void create() throws EnclaveCreatingException {
         enclave = EnclaveFactory.create(EnclaveType.TEE_SDK);
     }
 
-    public void injectCipher(byte[] cipher) throws ServicesLoadingException {
-        Iterator<AESCipherTextManagerService> services = enclave.load(AESCipherTextManagerService.class);
-        services.next().storeAesCipherText(cipher);
-    }
-
+    @Override
     public void destroy() throws EnclaveDestroyingException {
         if (enclave != null) {
             enclave.destroy();
         }
+    }
+
+    @Override
+    public void injectAESCipherText(byte[] cipher) throws ServicesLoadingException {
+        enclave.load(IAESCipherTextManagerService.class).next().storeAesCipherText(cipher);
     }
 
 }

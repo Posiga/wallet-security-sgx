@@ -1,4 +1,4 @@
-package com.ida.wallet.security.host.console;
+package com.ida.wallet.security.host.component;
 
 import org.springframework.stereotype.Component;
 
@@ -9,9 +9,9 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 
 @Component
-public class ConsoleSecretReader {
+public class ConsoleInputReader {
 
-    public char[] readSecret(String hint) {
+    public char[] readInput(String hint) {
 
         Console console = System.console();
 

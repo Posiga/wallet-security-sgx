@@ -1,10 +1,10 @@
-package com.ida.wallet.security.enclave;
+package com.ida.wallet.security.enclave.impl;
 
 import com.google.auto.service.AutoService;
-import com.ida.wallet.security.common.AESCipherTextManagerService;
+import com.ida.wallet.security.common.service.IAESCipherTextManagerService;
 
-@AutoService(AESCipherTextManagerService.class)
-public class AESCipherTextManagerServiceImpl implements AESCipherTextManagerService {
+@AutoService(IAESCipherTextManagerService.class)
+public class AESCipherTextManagerServiceImpl implements IAESCipherTextManagerService {
     /**
      * 常驻 enclave EPC 内存
      */
@@ -16,13 +16,13 @@ public class AESCipherTextManagerServiceImpl implements AESCipherTextManagerServ
     private boolean initialized = false;
 
     @Override
-    public synchronized void storeAesCipherText(byte[] cipherTextBytes) {
+    public synchronized void storeAesCipherText(byte[] aesCipherTextBytes) {
 
-        if (cipherTextBytes == null || cipherTextBytes.length == 0) {
+        if (aesCipherTextBytes == null || aesCipherTextBytes.length == 0) {
             throw new IllegalArgumentException("cipherTextBytes is empty");
         }
 
-        // 防止密钥被重新注入（非常重要）
+        // 防止密钥被重新注入
         if (initialized) {
             throw new IllegalStateException("AES ciphertext already initialized");
         }
@@ -32,13 +32,13 @@ public class AESCipherTextManagerServiceImpl implements AESCipherTextManagerServ
          * Host 传入的 buffer 不可信
          * 避免外部持有引用修改 enclave 内数据
          */
-        aesCipherText = new byte[cipherTextBytes.length];
+        aesCipherText = new byte[aesCipherTextBytes.length];
         System.arraycopy(
-                cipherTextBytes,
+                aesCipherTextBytes,
                 0,
                 aesCipherText,
                 0,
-                cipherTextBytes.length);
+                aesCipherTextBytes.length);
 
         initialized = true;
     }

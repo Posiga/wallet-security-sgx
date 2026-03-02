@@ -1,7 +1,6 @@
 package com.ida.wallet.security.host.service.impl;
 
-import com.ida.wallet.security.common.AESCipherTextManagerService;
-import com.ida.wallet.security.host.enclave.EnclaveService;
+import com.ida.wallet.security.common.service.IAESCipherTextManagerService;
 import com.ida.wallet.security.host.service.IAESCipherTextService;
 import org.apache.teaclave.javasdk.host.Enclave;
 import org.apache.teaclave.javasdk.host.exception.ServicesLoadingException;
@@ -12,9 +11,9 @@ import java.util.Iterator;
 @Service
 public class AESCipherTextServiceImpl implements IAESCipherTextService {
 
-    private final EnclaveService enclaveService;
+    private final EnclaveServiceImpl enclaveService;
 
-    public AESCipherTextServiceImpl(EnclaveService enclaveService) {
+    public AESCipherTextServiceImpl(EnclaveServiceImpl enclaveService) {
         this.enclaveService = enclaveService;
     }
 
@@ -22,7 +21,7 @@ public class AESCipherTextServiceImpl implements IAESCipherTextService {
     @Override
     public byte[] getAesCipherText() throws ServicesLoadingException {
         Enclave enclave = enclaveService.getEnclave();
-        Iterator<AESCipherTextManagerService> services = enclave.load(AESCipherTextManagerService.class);
+        Iterator<IAESCipherTextManagerService> services = enclave.load(IAESCipherTextManagerService.class);
 
         return services.next().getAesCipherText();
     }

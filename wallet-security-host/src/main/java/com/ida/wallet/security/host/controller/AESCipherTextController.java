@@ -1,22 +1,24 @@
 package com.ida.wallet.security.host.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.ida.wallet.security.host.config.WalletPwdConfig;
 import com.ida.wallet.security.host.enums.ResponseCodeEnum;
 import com.ida.wallet.security.host.request.CiphertextRequest;
 import com.ida.wallet.security.host.response.CiphertextResponse;
 import com.ida.wallet.security.host.response.ResponseResult;
 import com.ida.wallet.security.host.service.IAESCipherTextService;
+import com.ida.wallet.security.host.utils.SignatureVerifyUtil;
 import org.apache.teaclave.javasdk.host.AttestationReport;
 import org.apache.teaclave.javasdk.host.RemoteAttestation;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import java.util.Arrays;
 import java.util.Base64;
 
+import static com.ida.wallet.security.host.enums.ResponseCodeEnum.SIGNATURE_VERIFY_FAIL;
+
 @RestController
-@RequestMapping("/security/aes")
+@RequestMapping("/v1/aes")
 public class AESCipherTextController {
 
     private final IAESCipherTextService aesService;
@@ -33,9 +35,21 @@ public class AESCipherTextController {
      * - 使用 Base64 作为 HTTP 安全编码
      */
     @GetMapping("/ciphertext")
-    public ResponseResult<CiphertextResponse> getAesCipherText(@Valid @RequestBody CiphertextRequest request) throws Exception {
+    public ResponseResult<CiphertextResponse> getAesCipherText(@RequestHeader("nonce") String nonce,
+                                                               @RequestHeader("signature") String signature,
+                                                               @RequestBody String reportStr
+                                                                ) throws Exception {
 
-        AttestationReport attestationReport = AttestationReport.fromByteArray(request.getQuote());
+        String method = "POST";
+        String path = "/v1/aes/ciphertext";
+
+        if (!SignatureVerifyUtil.SignatureVerify(method, path, nonce, reportStr, signature)) {
+            return ResponseResult.fail(SIGNATURE_VERIFY_FAIL.getMsg(), SIGNATURE_VERIFY_FAIL.getCode());
+        }
+
+        CiphertextRequest ciphertextRequest = JSON.parseObject(WalletPwdConfig.decryptContent(reportStr), CiphertextRequest.class);
+
+        AttestationReport attestationReport = AttestationReport.fromByteArray(ciphertextRequest.getReportBytes());
 
         int result = RemoteAttestation.verifyAttestationReport(attestationReport);
         if (result != 0) {
@@ -46,11 +60,11 @@ public class AESCipherTextController {
 
         try {
             // HTTP 安全返回
-            return ResponseResult.success(CiphertextResponse.of(Base64.getEncoder().encodeToString(cipher)));
+            return ResponseResult.success(CiphertextResponse.builder().ciphertext(Base64.getEncoder().encodeToString(cipher)).build());
         } finally {
             // host copy 及时擦除
             if (cipher != null) {
-                java.util.Arrays.fill(cipher, (byte) 0);
+                Arrays.fill(cipher, (byte) 0);
             }
         }
     }

@@ -26,6 +26,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <graal.version>22.2.0</graal.version>
         <surefire.version>3.0.0-M5</surefire.version>
+        <fastjson.version>1.2.83</fastjson.version>
         <!--生产用-->
         <org.apache.teaclave.javasdk.platform>TEE_SDK</org.apache.teaclave.javasdk.platform>
         <!--本地测试用-->
@@ -73,6 +74,21 @@
                 <groupId>org.bouncycastle</groupId>
                 <artifactId>bcprov-jdk15on</artifactId>
                 <version>1.66</version>
+            </dependency>
+            <dependency>
+                <groupId>com.github.ulisesbocchio</groupId>
+                <artifactId>jasypt-spring-boot-starter</artifactId>
+                <version>3.0.4</version>
+            </dependency>
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-crypto</artifactId>
+                <version>5.7.18</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>fastjson</artifactId>
+                <version>${fastjson.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
