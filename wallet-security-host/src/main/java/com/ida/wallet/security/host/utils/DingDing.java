@@ -10,13 +10,12 @@ import java.util.concurrent.TimeUnit;
 
 @Slf4j
 public class DingDing {
-    private static HttpClient httpClient = new HttpClient(10);
-    private static String dingdingBaseUrl = "https://oapi.dingtalk.com/robot/send?access_token=";
+    private static final HttpClient httpClient = new HttpClient(10);
 
     //钱包报错群,钱包报错Reboot
     public static String walletAccessToken = "f77e1da117c1df5edccf9deb3ac228a57334499a7dc4436b65ec4a3072081424";
 
-    private static Cache<Integer, Boolean> msgCache =
+    private static final Cache<Integer, Boolean> msgCache =
         CacheBuilder.newBuilder().maximumSize(1000).expireAfterWrite(10, TimeUnit.MINUTES).build();
 
     //发送到钱包组
@@ -36,6 +35,7 @@ public class DingDing {
         message.put("markdown", markdown);
 
         try {
+            String dingdingBaseUrl = "https://oapi.dingtalk.com/robot/send?access_token=";
             httpClient.json(dingdingBaseUrl + accessToken).body(message).execute();
         } catch (Throwable e) {
             log.error("发送钉钉异常, url {}, title {}, text {}", accessToken, title, text, e);

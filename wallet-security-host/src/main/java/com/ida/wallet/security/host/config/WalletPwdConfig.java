@@ -5,7 +5,7 @@ import com.ulisesbocchio.jasyptspringboot.EncryptablePropertyResolver;
 import org.springframework.boot.DefaultApplicationArguments;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.StringUtils;
+import org.springframework.util.ObjectUtils;
 
 import java.io.BufferedReader;
 import java.io.Console;
@@ -33,7 +33,7 @@ public class WalletPwdConfig {
             try {
                 System.out.print("请输入密码:");
                 aesKeyStr = br.readLine();
-            } catch (IOException e) {}
+            } catch (IOException ignored) {}
         } else {
             Console console = System.console();
             char[] password = console.readPassword("请输入密码:");
@@ -61,17 +61,17 @@ public class WalletPwdConfig {
         return new EncryptionPropertyResolver();
     }
 
-    class EncryptionPropertyResolver implements EncryptablePropertyResolver {
+    static class EncryptionPropertyResolver implements EncryptablePropertyResolver {
 
         private static final String enc = "enc@";
 
         @Override
         public String resolvePropertyValue(String value) {
-            if(StringUtils.isEmpty(value) || value.length() < enc.length()) {
+            if(ObjectUtils.isEmpty(value) || value.length() < enc.length()) {
                 return value;
             }
-            String profiex = value.substring(0, enc.length());
-            if(profiex.equalsIgnoreCase(enc)) {
+            String prefix = value.substring(0, enc.length());
+            if(prefix.equalsIgnoreCase(enc)) {
                 return decryptContent(value.substring(enc.length()));
             }
             return value;
