@@ -73,6 +73,7 @@ public class WalletPwdConfig {
             }
             String prefix = value.substring(0, enc.length());
             if(prefix.equalsIgnoreCase(enc)) {
+                System.out.println("解密结果：" + decryptContent(value.substring(enc.length())));
                 return decryptContent(value.substring(enc.length()));
             }
             return value;
