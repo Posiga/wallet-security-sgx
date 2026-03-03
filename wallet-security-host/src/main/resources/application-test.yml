@@ -4,11 +4,11 @@ server:
   ssl:
     enabled: true
     key-store-type: JKS
-    key-store: /test/wallet/security/server.jks
+    key-store: /work/test/wallet/security/server.jks
     key-store-password: enc@7k5AHe9USqRBWFFbgbxuGi
     key-alias: server
     trust-store-type: JKS
-    trust-store: /test/wallet/security/server.jks
+    trust-store: /work/test/wallet/security/server.jks
     #aes base58 密码 1234567890123456, 明文 changeit
     trust-store-password: enc@7k5AHe9USqRBWFFbgbxuGi
     trust-store-provider: SUN
