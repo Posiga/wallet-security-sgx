@@ -14,8 +14,8 @@ public class WalletSecuritySgxHostApplication {
 
     public static void main(String[] args) {
         DefaultApplicationArguments appArg = new DefaultApplicationArguments(args);
-		WalletPwdConfig.readPasswd(appArg);
-
+        // 读取钱包密码
+        WalletPwdConfig.readPasswd(appArg);
         SpringApplication.run(WalletSecuritySgxHostApplication.class, args);
     }
 

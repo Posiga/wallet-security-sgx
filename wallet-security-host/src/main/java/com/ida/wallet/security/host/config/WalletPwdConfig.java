@@ -1,11 +1,8 @@
 package com.ida.wallet.security.host.config;
 
 import com.ida.wallet.security.host.utils.AesBase58;
-import com.ulisesbocchio.jasyptspringboot.EncryptablePropertyResolver;
 import org.springframework.boot.DefaultApplicationArguments;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.ObjectUtils;
 
 import java.io.BufferedReader;
 import java.io.Console;
@@ -55,28 +52,5 @@ public class WalletPwdConfig {
 
     public static String encryptContent(String plainContent) {
         return AesBase58.encrypt(plainContent, aesKeyStr);
-    }
-
-    @Bean(name="encryptablePropertyResolver")
-    public EncryptablePropertyResolver encryptablePropertyResolver() {
-        return new EncryptionPropertyResolver();
-    }
-
-    static class EncryptionPropertyResolver implements EncryptablePropertyResolver {
-
-        private static final String enc = "enc@";
-
-        @Override
-        public String resolvePropertyValue(String value) {
-            if(ObjectUtils.isEmpty(value) || value.length() < enc.length()) {
-                return value;
-            }
-            String prefix = value.substring(0, enc.length());
-            if(prefix.equalsIgnoreCase(enc)) {
-                System.out.println("解密结果：" + decryptContent(value.substring(enc.length())));
-                return decryptContent(value.substring(enc.length()));
-            }
-            return value;
-        }
     }
 }
