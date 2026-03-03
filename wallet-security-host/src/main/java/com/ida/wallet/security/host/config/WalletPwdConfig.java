@@ -37,6 +37,7 @@ public class WalletPwdConfig {
         } else {
             Console console = System.console();
             char[] password = console.readPassword("请输入密码:");
+            System.out.println("输入的密码为：" + new String(password));
             aesKeyStr = new String(password);
         }
 
