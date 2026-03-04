@@ -20,7 +20,7 @@ import java.util.List;
 public class WalletSecuritySgxHostApplication {
 
     public static void main(String[] args) throws IOException {
-        // 1.读取控制台 AES Key
+        // 1.读取控制台密码
         DefaultApplicationArguments appArg = new DefaultApplicationArguments(args);
         WalletPwdConfig.readPasswd(appArg);
 
@@ -49,7 +49,7 @@ public class WalletSecuritySgxHostApplication {
                 if (str.startsWith("enc@")) {
                     String decrypted = WalletPwdConfig.decryptContent(str.substring(4));
                     System.setProperty("server.ssl.key-store-password", decrypted);
-                    System.out.println("解密 key-store-password 成功");
+                    log.info("解密 key-store-password 成功");
                 }
             }
 
@@ -58,7 +58,7 @@ public class WalletSecuritySgxHostApplication {
                 if (str.startsWith("enc@")) {
                     String decrypted = WalletPwdConfig.decryptContent(str.substring(4));
                     System.setProperty("server.ssl.trust-store-password", decrypted);
-                    System.out.println("解密 trust-store-password 成功");
+                    log.info("解密 trust-store-password 成功");
                 }
             }
         }

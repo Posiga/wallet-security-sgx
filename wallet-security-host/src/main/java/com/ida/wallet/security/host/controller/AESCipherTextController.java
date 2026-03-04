@@ -34,8 +34,8 @@ public class AESCipherTextController {
      * - Controller 永远不要暴露 byte[]
      * - 使用 Base64 作为 HTTP 安全编码
      */
-    @GetMapping("/ciphertext")
-    public ResponseResult<CiphertextResponse> getAesCipherText(@RequestHeader("nonce") String nonce,
+    @PostMapping("/ciphertext")
+    public ResponseResult<String> getAesCipherText(@RequestHeader("nonce") String nonce,
                                                                @RequestHeader("signature") String signature,
                                                                @RequestBody String reportStr
                                                                 ) throws Exception {
@@ -59,8 +59,9 @@ public class AESCipherTextController {
         byte[] cipher = aesService.getAesCipherText();
 
         try {
+            CiphertextResponse response = CiphertextResponse.builder().ciphertext(Base64.getEncoder().encodeToString(cipher)).build();
             // HTTP 安全返回
-            return ResponseResult.success(CiphertextResponse.builder().ciphertext(Base64.getEncoder().encodeToString(cipher)).build());
+            return ResponseResult.success(WalletPwdConfig.encryptContent(JSON.toJSONString(response)));
         } finally {
             // host copy 及时擦除
             if (cipher != null) {
