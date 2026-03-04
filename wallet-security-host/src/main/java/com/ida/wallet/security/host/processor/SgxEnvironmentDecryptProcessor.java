@@ -52,10 +52,8 @@ public class SgxEnvironmentDecryptProcessor implements EnvironmentPostProcessor,
                 if (str != null && str.startsWith("enc@")) {
 
                     String decryptedValue = WalletPwdConfig.decryptContent(str.substring(4));
-
+                    System.out.println("解密属性: " + entry.getKey() + ", 原值: " + str + ", 解密后: " + decryptedValue);
                     decrypted.put(entry.getKey(), decryptedValue);
-
-                    System.out.println("解密成功: " + entry.getKey());
                 }
             }
         }
