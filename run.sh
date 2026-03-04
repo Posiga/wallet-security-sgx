@@ -25,7 +25,11 @@ echo "USE_SECURE_CERT=TRUE" >> /etc/sgx_default_qcnl.conf
 
 mvn -Pnative clean package
 
-OCCLUM_RELEASE_ENCLAVE=true nohup stdbuf -oL -eL java \
- -cp wallet-security-host/target/wallet-security-host-0.1.0-jar-with-dependencies.jar:wallet-security-enclave/target/wallet-security-enclave-0.1.0-jar-with-dependencies.jar \
- com.ida.wallet.security.host.WalletSecuritySgxHostApplication \
- 2>&1 | tee /work/test/wallet-security.log &
+OCCLUM_RELEASE_ENCLAVE=true java -Dspring.profiles.active=test \
+-cp wallet-security-host/target/wallet-security-host-0.1.0-jar-with-dependencies.jar:wallet-security-enclave/target/wallet-security-enclave-0.1.0-jar-with-dependencies.jar \
+com.ida.wallet.security.host.WalletSecuritySgxHostApplication
+
+#OCCLUM_RELEASE_ENCLAVE=true nohup stdbuf -oL -eL java \
+# -cp wallet-security-host/target/wallet-security-host-0.1.0-jar-with-dependencies.jar:wallet-security-enclave/target/wallet-security-enclave-0.1.0-jar-with-dependencies.jar \
+# com.ida.wallet.security.host.WalletSecuritySgxHostApplication \
+# 2>&1 | tee /work/test/wallet-security.log &
