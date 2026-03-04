@@ -5,15 +5,10 @@ import com.ida.wallet.security.common.service.IAESCipherTextManagerService;
 
 @AutoService(IAESCipherTextManagerService.class)
 public class AESCipherTextManagerServiceImpl implements IAESCipherTextManagerService {
-    /**
-     * 常驻 enclave EPC 内存
-     */
-    private byte[] aesCipherText;
 
-    /**
-     * 是否已经初始化
-     */
-    private boolean initialized = false;
+    private static volatile byte[] aesCipherText;
+
+    private static volatile boolean initialized = false;
 
     @Override
     public synchronized void storeAesCipherText(byte[] aesCipherTextBytes) {
@@ -41,6 +36,7 @@ public class AESCipherTextManagerServiceImpl implements IAESCipherTextManagerSer
                 aesCipherTextBytes.length);
 
         initialized = true;
+        System.out.println("AES ciphertext stored in enclave successfully");
     }
 
     @Override
