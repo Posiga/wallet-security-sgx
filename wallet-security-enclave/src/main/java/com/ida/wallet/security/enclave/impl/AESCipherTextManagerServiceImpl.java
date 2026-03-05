@@ -36,7 +36,6 @@ public class AESCipherTextManagerServiceImpl implements IAESCipherTextManagerSer
                 aesCipherTextBytes.length);
 
         initialized = true;
-        System.out.println("AES ciphertext stored in enclave successfully");
     }
 
     @Override
