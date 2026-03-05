@@ -45,11 +45,11 @@
                 <artifactId>enclave</artifactId>
                 <version>0.1.0</version>
             </dependency>
-<!--            <dependency>-->
-<!--                <groupId>org.apache.teaclave.javasdk</groupId>-->
-<!--                <artifactId>host</artifactId>-->
-<!--                <version>0.1.0</version>-->
-<!--            </dependency>-->
+            <dependency>
+                <groupId>org.apache.teaclave.javasdk</groupId>
+                <artifactId>host</artifactId>
+                <version>0.1.0</version>
+            </dependency>
             <dependency>
                 <groupId>com.ida.wallet.signer</groupId>
                 <artifactId>wallet-security-common</artifactId>

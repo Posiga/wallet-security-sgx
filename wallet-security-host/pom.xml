@@ -18,11 +18,6 @@
         <dependency>
             <groupId>org.apache.teaclave.javasdk</groupId>
             <artifactId>host</artifactId>
-            <version>0.1.0-ra-verify-patch</version>
-            <scope>system</scope>
-            <systemPath>
-                ${project.basedir}/tee_sdk_host_lib/host-0.1.0-ra-verify-patch.jar
-            </systemPath>
         </dependency>
         <dependency>
             <groupId>org.apache.teaclave.javasdk</groupId>
